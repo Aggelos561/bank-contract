@@ -1,3 +1,6 @@
 [submodule "forge_project/lib/forge-std"]
 	path = forge_project/lib/forge-std
 	url = https://github.com/foundry-rs/forge-std
+[submodule "Angel_Token/lib/forge-std"]
+	path = Angel_Token/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
