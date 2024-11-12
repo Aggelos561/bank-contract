@@ -31,11 +31,12 @@ contract AngelBank {
         uint256 balance = getUserBalance(msg.sender);
 
         require(balance > 0, "Insufficient balance");
-        // totalSupply -= balance;
+        
+        totalSupply -= balance;
 
         console.log("Hello from withdraw");
 
-        // balances[msg.sender] = 0; EFFECT PATTERN HERE
+        // balances[msg.sender] = 0; EFFECTS PATTERN HERE
 
         (bool success, ) = msg.sender.call{value: balance}("");
         require(success, "Failed to send Ether");
