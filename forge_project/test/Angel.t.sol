@@ -17,12 +17,23 @@ contract AngelTest is Test {
         token = new Angel(100);
     }
 
+    function testSymbols() view public {
+        assertEq(token.name(), "Angel");
+        assertEq(token.symbol(), "$");
+        assertEq(token.decimals(), 8);
+
+    }
+
     function testInitBalance() public {
         vm.prank(user1);
         uint256 myBalance = token.balanceOf(user1);
         
         console.log("User 1 balance is: ", myBalance);
         assertEq(myBalance, 100);
+    }
+
+    function testTotalSupply() view public {     
+        assertEq(token.totalSupply(), 100);
     }
 
     function testTransfer() public {
@@ -41,10 +52,23 @@ contract AngelTest is Test {
 
     function testApprove() public {
         vm.prank(user1);
-        token.approve(user2, 100);
+        token.increaseAllowance(user2, 100);
         uint256 allowance = token.allowance(user1, user2);
 
         console.log("Allowance from user 1 to user 2 is: ", allowance);
         assertEq(allowance, 100);
+
+        vm.prank(user2);
+        token.increaseAllowance(user1, 100);
+        allowance = token.allowance(user2, user1);
+
+        console.log("Allowance from user 2 to user 1 is: ", allowance);
+        assertEq(allowance, 100);
+
+        vm.prank(user2);
+        token.transferFrom(user1, user2, 100);
+        allowance = token.allowance(user1, user2);
+        assertEq(allowance, 0);
+        
     }
 }
